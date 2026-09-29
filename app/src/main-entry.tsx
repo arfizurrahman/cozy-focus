@@ -1,0 +1,6 @@
+import './fonts';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { MainWindow } from './MainWindow';
+
+createRoot(document.getElementById('root')!).render(<StrictMode><MainWindow /></StrictMode>);
