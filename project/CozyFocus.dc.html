@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>body{margin:0;background:oklch(0.88 0.025 70)}a{color:oklch(0.55 0.12 45)}a:hover{color:oklch(0.45 0.12 45)}button{font-family:inherit;color:inherit}input{font-family:inherit}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;font-family:'DM Sans',sans-serif;color:oklch(0.28 0.03 50)">
+<div style="width:1040px;height:690px;display:flex;flex-direction:column;background:oklch(0.975 0.012 80);border-radius:8px;overflow:hidden;box-shadow:0 30px 70px oklch(0.4 0.05 50/0.28),0 0 0 1px oklch(0.78 0.02 70)">
+  <div style="height:34px;flex:none;display:flex;align-items:center;padding-left:14px;background:oklch(0.93 0.02 75);font-size:13px;gap:8px;border-bottom:1px solid oklch(0.88 0.02 70)"><span style="width:10px;height:10px;border-radius:3px;background:{{ accent }}"></span>CozyFocus<span style="margin-left:auto;display:flex;height:100%"><span style="width:46px;display:flex;align-items:center;justify-content:center">–</span><span style="width:46px;display:flex;align-items:center;justify-content:center">▢</span><span style="width:46px;display:flex;align-items:center;justify-content:center">✕</span></span></div>
+  <div style="flex:1;display:flex;min-height:0">
+  <div style="width:200px;flex:none;background:oklch(0.94 0.02 75);padding:18px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;border-right:1px solid oklch(0.88 0.02 70)">
+    <div style="font-family:'Newsreader',serif;font-size:26px;padding:0 10px 16px">Cozy<span style="color:{{ accent }}">Focus</span></div>
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5"><button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+    <div style="margin-top:auto;padding:14px;border-radius:12px;background:oklch(0.9 0.04 75);font-size:13px;line-height:1.5"><div style="font-weight:600">{{ streakTitle }}</div><div style="opacity:0.75">Current streak: 5 days</div></div>
+  </div>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative">
+
+  <sc-if value="{{ isFocus }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:oklch(0.965 0.02 65)">
+    <div style="font-size:15px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.65">{{ sessionName }}</div>
+    <div style="font-family:'Newsreader',serif;font-size:132px;line-height:1;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ clock }}</div>
+    <div style="width:360px;height:8px;border-radius:99px;background:oklch(0.3 0.03 50/0.1);overflow:hidden"><div style="height:100%;border-radius:99px;background:{{ accent }};width:{{ pct }}"></div></div>
+    <div style="font-size:15px;opacity:0.75">{{ taskLabel }}</div>
+    <div style="display:flex;gap:12px">
+      <button onClick="{{ toggle }}" style="min-width:140px;height:52px;border-radius:999px;border:0;background:{{ accent }};color:oklch(0.99 0.01 80);font-size:16px;font-weight:600;cursor:pointer">{{ toggleLabel }}</button>
+      <button onClick="{{ skip }}" style="min-width:100px;height:52px;border-radius:999px;border:1px solid oklch(0.3 0.03 50/0.22);background:transparent;font-size:16px;cursor:pointer">Skip</button>
+      <button onClick="{{ toSetup }}" style="height:52px;padding:0 20px;border-radius:999px;border:1px solid oklch(0.3 0.03 50/0.22);background:transparent;font-size:16px;cursor:pointer">New session</button>
+    </div>
+    <div style="font-size:14px;opacity:0.8">{{ todayCount }} sessions today</div>
+    <div style="display:flex;gap:4px;padding:4px;border-radius:999px;background:oklch(1 0 0/0.6)"><sc-for list="{{ modes }}" as="m" hint-placeholder-count="3"><button onClick="{{ m.go }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isBreak }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:oklch(0.955 0.03 145)">
+    <div style="font-family:'Newsreader',serif;font-size:44px">Take a little break</div>
+    <div style="font-family:'Newsreader',serif;font-size:110px;line-height:1;font-variant-numeric:tabular-nums">{{ clock }}</div>
+    <div style="font-size:19px;height:28px;text-align:center">{{ breakMsg }}</div>
+    <div style="display:flex;gap:14px"><span style="width:70px;height:70px;border-radius:16px;border:1px dashed oklch(0.5 0.08 145);display:flex;align-items:center;justify-content:center;font:11px 'JetBrains Mono',monospace;text-align:center;opacity:0.7">tea<br>icon</span><span style="width:70px;height:70px;border-radius:16px;border:1px dashed oklch(0.5 0.08 145);display:flex;align-items:center;justify-content:center;font:11px 'JetBrains Mono',monospace;text-align:center;opacity:0.7">plant<br>icon</span><span style="width:70px;height:70px;border-radius:16px;border:1px dashed oklch(0.5 0.08 145);display:flex;align-items:center;justify-content:center;font:11px 'JetBrains Mono',monospace;text-align:center;opacity:0.7">cat<br>icon</span></div>
+    <div style="display:flex;gap:12px"><button onClick="{{ toggle }}" style="min-width:110px;height:48px;border-radius:999px;border:1px solid oklch(0.3 0.03 50/0.22);background:transparent;font-size:15px;cursor:pointer">{{ toggleLabel }}</button><button onClick="{{ skip }}" style="min-width:140px;height:48px;border-radius:999px;border:0;background:oklch(0.55 0.08 145);color:oklch(0.99 0.01 80);font-size:15px;font-weight:600;cursor:pointer">Skip break</button></div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isSetup }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center"><div style="width:440px;display:flex;flex-direction:column;gap:18px">
+    <div style="font-family:'Newsreader',serif;font-size:36px">What are you working on?</div>
+    <input value="{{ task }}" onChange="{{ setTask }}" style="height:50px;border-radius:12px;border:1px solid oklch(0.82 0.02 70);background:oklch(1 0.005 80);padding:0 16px;font-size:16px;outline:none"></input>
+    <div style="font-size:13px;opacity:0.65;margin-bottom:-8px">Focus duration</div>
+    <div style="display:flex;gap:8px"><sc-for list="{{ presets }}" as="p" hint-placeholder-count="3"><button onClick="{{ p.go }}" style="{{ p.style }}"><span style="font-weight:600">{{ p.label }}</span><span style="font-size:12px;opacity:0.7">{{ p.min }} min</span></button></sc-for></div>
+    <button onClick="{{ startFocus }}" style="height:54px;border-radius:999px;border:0;background:{{ accent }};color:oklch(0.99 0.01 80);font-size:17px;font-weight:600;cursor:pointer">Start Focus</button>
+  </div></div>
+  </sc-if>
+
+  <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:40px 48px;overflow:auto">
+    <div style="font-family:'Newsreader',serif;font-size:36px">This week</div>
+    <div style="display:flex;gap:14px;margin:20px 0 22px"><sc-for list="{{ kpis }}" as="p" hint-placeholder-count="4"><div style="flex:1;padding:16px;border-radius:14px;background:oklch(0.94 0.025 75)"><div style="font-family:'Newsreader',serif;font-size:32px">{{ p.v }}</div><div style="font-size:13px;opacity:0.7">{{ p.l }}</div></div></sc-for></div>
+    <div style="display:flex;align-items:flex-end;gap:16px;height:210px;padding:20px;border-radius:14px;background:oklch(1 0.005 80);border:1px solid oklch(0.9 0.015 70)"><sc-for list="{{ bars }}" as="b" hint-placeholder-count="7"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;height:100%"><span style="font-size:12px;opacity:0.7">{{ b.h }}</span><div style="{{ b.style }}"></div><span style="font-size:12px;opacity:0.65">{{ b.d }}</span></div></sc-for></div>
+    <div style="margin-top:16px;font-size:14px;opacity:0.75">Most productive time: 9:00 – 11:30</div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:40px 48px;overflow:auto">
+    <div style="font-family:'Newsreader',serif;font-size:36px;margin-bottom:14px">History</div>
+    <sc-for list="{{ history }}" as="g" hint-placeholder-count="2"><div style="margin-bottom:22px"><div style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;margin-bottom:6px">{{ g.day }}</div>
+      <sc-for list="{{ g.items }}" as="e" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:16px;padding:11px 0;border-bottom:1px solid oklch(0.9 0.015 70)"><span style="width:50px;font-variant-numeric:tabular-nums;opacity:0.6;font-size:14px">{{ e.t }}</span><span style="width:8px;height:8px;border-radius:50%;background:{{ e.dot }}"></span><span style="width:60px;font-weight:500">{{ e.kind }}</span><span style="flex:1;opacity:0.75">{{ e.task }}</span><span style="opacity:0.6;font-size:14px">{{ e.min }} min</span></div></sc-for></div></sc-for>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:40px 48px;overflow:auto">
+    <div style="font-family:'Newsreader',serif;font-size:36px;margin-bottom:16px">Settings</div>
+    <div style="display:flex;gap:6px;margin-bottom:10px"><sc-for list="{{ subtabs }}" as="s" hint-placeholder-count="4"><button onClick="{{ s.go }}" style="{{ s.style }}">{{ s.label }}</button></sc-for></div>
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5"><div style="display:flex;align-items:center;padding:14px 0;border-bottom:1px solid oklch(0.9 0.015 70)"><span>{{ r.l }}</span>
+      <sc-if value="{{ r.isStep }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;display:flex;align-items:center;gap:12px"><button onClick="{{ r.minus }}" style="width:30px;height:30px;border-radius:50%;border:1px solid oklch(0.85 0.02 70);background:transparent;cursor:pointer">−</button><span style="min-width:64px;text-align:center;font-variant-numeric:tabular-nums">{{ r.v }}</span><button onClick="{{ r.plus }}" style="width:30px;height:30px;border-radius:50%;border:1px solid oklch(0.85 0.02 70);background:transparent;cursor:pointer">+</button></span></sc-if>
+      <sc-if value="{{ r.isTog }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.go }}" style="{{ r.track }}"><span style="width:20px;height:20px;border-radius:50%;background:#fff"></span></button></sc-if>
+      <sc-if value="{{ r.isSw }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;display:flex;gap:10px"><sc-for list="{{ r.sw }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.go }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for></span></sc-if>
+    </div></sc-for>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;display:flex;flex-direction:column;min-height:0">
+    <div style="flex:none;display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:1px solid oklch(0.9 0.015 70);font-size:13px;flex-wrap:wrap">
+      <span style="display:flex;gap:4px;padding:3px;border-radius:99px;background:oklch(0.93 0.02 75)"><sc-for list="{{ ovModes }}" as="m" hint-placeholder-count="3"><button onClick="{{ m.go }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></span>
+      <span style="display:flex;gap:4px"><sc-for list="{{ corners }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></span>
+      <label style="display:flex;align-items:center;gap:8px">Opacity<input type="range" min="40" max="100" value="{{ opacity }}" onChange="{{ setOpacity }}" style="width:100px"></input>{{ opacity }}%</label>
+      <button onClick="{{ toggleClick }}" style="{{ clickStyle }}">Click-through {{ clickLabel }}</button>
+    </div>
+    <div style="flex:1;position:relative;background:oklch(0.22 0.015 60);overflow:hidden">
+      <div style="position:absolute;inset:0 0 40px 0;display:flex;flex-direction:column"><div style="height:30px;background:oklch(0.27 0.015 60);display:flex;align-items:center;padding-left:14px;font-size:12px;color:oklch(0.8 0.01 70)">auth.ts — Visual Studio Code</div><div style="padding:18px 24px;font:13px/1.9 'JetBrains Mono',monospace;color:oklch(0.62 0.03 70);white-space:pre">export async function login(req) {
+  const user = await db.users.find(req.email);
+  if (!user) throw new AuthError('unknown');
+  const ok = await verify(req.password, user.hash);
+  return issueToken(user.id, { ttl: '7d' });
+}</div></div>
+      <div style="{{ overlayPos }}"><sc-if value="{{ ovMin }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;background:oklch(0.2 0.02 55/0.88);color:oklch(0.97 0.01 80);font:500 18px 'DM Sans',sans-serif;font-variant-numeric:tabular-nums"><span style="width:9px;height:9px;border-radius:50%;background:{{ accent }}"></span>{{ clock }}</div></sc-if>
+        <sc-if value="{{ ovCompact }}" hint-placeholder-val="{{ false }}"><div style="padding:10px 16px;border-radius:14px;background:oklch(0.2 0.02 55/0.88);color:oklch(0.97 0.01 80);font-variant-numeric:tabular-nums"><div style="display:flex;align-items:center;gap:8px;font-size:22px;font-weight:500"><span style="width:9px;height:9px;border-radius:50%;background:{{ accent }}"></span>{{ clock }}</div><div style="font-size:12px;opacity:0.75;margin-top:2px">{{ sessionName }}</div></div></sc-if>
+        <sc-if value="{{ ovExp }}" hint-placeholder-val="{{ false }}"><div style="width:210px;padding:16px;border-radius:16px;background:oklch(0.2 0.02 55/0.88);color:oklch(0.97 0.01 80);text-align:center;font-variant-numeric:tabular-nums"><div style="font-size:12px;opacity:0.75">{{ sessionName }}</div><div style="font-family:'Newsreader',serif;font-size:50px;line-height:1.1">{{ clock }}</div><div style="height:5px;border-radius:9px;background:oklch(1 0 0/0.15);margin:8px 0 12px;overflow:hidden"><div style="height:100%;background:{{ accent }};width:{{ pct }}"></div></div><div style="display:flex;gap:8px"><button onClick="{{ toggle }}" style="flex:1;height:32px;border-radius:99px;border:0;background:oklch(1 0 0/0.16);cursor:pointer;font-size:13px">{{ toggleLabel }}</button><button onClick="{{ reset }}" style="flex:1;height:32px;border-radius:99px;border:0;background:oklch(1 0 0/0.16);cursor:pointer;font-size:13px">Stop</button></div></div></sc-if></div>
+      <div style="position:absolute;top:44px;right:16px;width:280px;padding:12px 14px;border-radius:8px;background:oklch(0.96 0.012 80);box-shadow:0 6px 20px oklch(0 0 0/0.4);font-size:13px;line-height:1.4"><div style="font-weight:600">Focus session complete</div><div style="opacity:0.75">Nice work. Take a 5-minute break.</div></div>
+      <div style="position:absolute;right:10px;bottom:46px;width:210px;padding:6px;border-radius:10px;background:oklch(0.96 0.012 80);box-shadow:0 8px 24px oklch(0 0 0/0.45);font-size:13px;display:flex;flex-direction:column"><div style="padding:8px 10px;font-weight:600">CozyFocus</div><span style="padding:7px 10px">Start Focus</span><span style="padding:7px 10px">Pause</span><span style="padding:7px 10px">Skip</span><span style="padding:7px 10px;opacity:0.6;border-top:1px solid oklch(0.88 0.02 70);border-bottom:1px solid oklch(0.88 0.02 70)">{{ clock }} remaining</span><span style="padding:7px 10px">Show Timer</span><span style="padding:7px 10px">Settings</span><span style="padding:7px 10px">Quit</span></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:40px;background:oklch(0.16 0.012 60);display:flex;align-items:center;justify-content:flex-end;padding-right:14px;gap:12px;font-size:12px;color:oklch(0.85 0.01 70)"><span style="width:14px;height:14px;border-radius:4px;background:{{ accent }}"></span>{{ clock }}</div>
+    </div>
+  </div>
+  </sc-if>
+
+  </div></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'focus', sub: 'Timer', mode: 'focus', running: false, left: 1500, done: 3, task: 'Build authentication API', msg: 0,
+    dur: { focus: 25, short: 5, long: 15, cycle: 4 }, accent: 'terracotta',
+    on: { 'Auto-start breaks': true, 'Auto-start focus': false, 'Enable overlay': true, 'Always on top': true, 'Show remaining time': true, 'Show progress': true, 'Show task name': true, 'Minimal mode': false, 'Sound': true, 'Windows notification': true, 'Different sound for focus/break': false },
+    ov: 'minimal', corner: 'BR', opacity: 90, click: false };
+  componentDidMount() { this.iv = setInterval(() => {
+    this.setState(s => ({ msg: s.msg + 1 }));
+    const s = this.state; if (!s.running) return;
+    if (s.left <= 1) { const nm = s.mode === 'focus' ? (s.done % s.dur.cycle === 0 ? 'long' : 'short') : 'focus'; this.setState({ running: this.state.on['Auto-start breaks'], mode: nm, left: s.dur[nm] * 60, done: s.mode === 'focus' ? s.done + 1 : s.done }); }
+    else this.setState({ left: s.left - 1 }); }, 1000); }
+  componentWillUnmount() { clearInterval(this.iv); }
+  pick(mode) { this.setState(s => ({ mode, running: false, left: s.dur[mode] * 60 })); }
+  renderVals() {
+    const s = this.state, ink = 'oklch(0.28 0.03 50)';
+    const AC = { terracotta: 'oklch(0.58 0.13 40)', sage: 'oklch(0.55 0.09 145)', brown: 'oklch(0.48 0.07 60)' }, accent = AC[s.accent];
+    const total = s.dur[s.mode] * 60, m = Math.floor(s.left / 60), sec = s.left % 60;
+    const clock = String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+    const nm = { focus: 'Deep Work', short: 'Short Break', long: 'Long Break' };
+    const pill = (a, c) => `border:0;border-radius:999px;padding:7px 15px;font-size:13px;cursor:pointer;color:${ink};background:${a ? 'oklch(1 0 0)' : 'transparent'};font-weight:${a ? 600 : 400};box-shadow:${a ? '0 1px 3px oklch(0.4 0.05 50/0.18)' : 'none'}`;
+    const tabDefs = [['focus', 'Focus'], ['stats', 'Stats'], ['history', 'History'], ['settings', 'Settings'], ['desktop', 'Overlay & tray']];
+    const isB = s.mode !== 'focus';
+    const tog = l => ({ l, isTog: true, go: () => this.setState(st => ({ on: { ...st.on, [l]: !st.on[l] } })), track: `margin-left:auto;width:44px;height:26px;border-radius:999px;border:0;padding:3px;cursor:pointer;display:flex;justify-content:${s.on[l] ? 'flex-end' : 'flex-start'};background:${s.on[l] ? accent : 'oklch(0.85 0.02 70)'}` });
+    const step = (l, key, unit, mn, mx) => ({ l, isStep: true, v: s.dur[key] + ' ' + unit,
+      minus: () => this.setState(st => ({ dur: { ...st.dur, [key]: Math.max(mn, st.dur[key] - 1) }, ...(st.mode === key && !st.running ? { left: Math.max(mn, st.dur[key] - 1) * 60 } : {}) })),
+      plus: () => this.setState(st => ({ dur: { ...st.dur, [key]: Math.min(mx, st.dur[key] + 1) }, ...(st.mode === key && !st.running ? { left: Math.min(mx, st.dur[key] + 1) * 60 } : {}) })) });
+    const rowsBy = { Timer: [step('Focus duration', 'focus', 'min', 1, 90), step('Short break', 'short', 'min', 1, 30), step('Long break', 'long', 'min', 1, 60), step('Sessions before long break', 'cycle', '', 2, 8), tog('Auto-start breaks'), tog('Auto-start focus')],
+      Overlay: [tog('Enable overlay'), tog('Always on top'), tog('Show remaining time'), tog('Show progress'), tog('Show task name')],
+      Appearance: [{ l: 'Accent color', isSw: true, sw: Object.keys(AC).map(k => ({ name: k, go: () => this.setState({ accent: k }), style: `width:28px;height:28px;border-radius:50%;cursor:pointer;background:${AC[k]};border:3px solid ${s.accent === k ? 'oklch(0.98 0.01 80)' : 'transparent'};box-shadow:0 0 0 ${s.accent === k ? 2 : 0}px ${AC[k]}` })) }, tog('Minimal mode')],
+      Notifications: [tog('Sound'), tog('Windows notification'), tog('Different sound for focus/break')] };
+    const rows = rowsBy[s.sub].map(r => ({ isStep: false, isTog: false, isSw: false, ...r }));
+    const D = { BR: 'right:16px;bottom:56px', BL: 'left:16px;bottom:56px', TR: 'right:16px;top:44px', TL: 'left:16px;top:44px' };
+    const msgs = ['Grab some water.', 'Look outside for a minute.', 'Relax your shoulders.', 'Your work will still be here.'];
+    const dotc = 'oklch(0.58 0.13 40)', dg = 'oklch(0.55 0.09 145)';
+    const H = (t, k, task, min) => ({ t, kind: k, task, min, dot: k === 'Focus' ? dotc : dg });
+    return {
+      accent, clock, streakTitle: s.done + ' sessions today', todayCount: s.done,
+      tabs: tabDefs.map(([id, label]) => ({ label, go: () => this.setState({ tab: id }), style: `border:0;border-radius:10px;padding:10px 12px;font-size:15px;cursor:pointer;text-align:left;color:${ink};background:${(s.tab === id || (id === 'focus' && s.tab === 'setup')) ? 'oklch(0.99 0.008 80)' : 'transparent'};font-weight:${s.tab === id ? 600 : 400}` })),
+      isFocus: s.tab === 'focus' && !isB, isBreak: s.tab === 'focus' && isB, isSetup: s.tab === 'setup', isStats: s.tab === 'stats', isHistory: s.tab === 'history', isSettings: s.tab === 'settings', isDesktop: s.tab === 'desktop',
+      sessionName: nm[s.mode], pct: (100 * (1 - s.left / total)) + '%', taskLabel: s.mode === 'focus' ? s.task : 'Rest up — ' + s.task + ' is waiting',
+      toggleLabel: s.running ? 'Pause' : s.left === 0 ? 'Restart' : 'Start',
+      toggle: () => this.setState({ running: !s.running }), reset: () => this.setState({ running: false, left: total }),
+      skip: () => { const n = s.mode === 'focus' ? (s.done % s.dur.cycle === 0 ? 'long' : 'short') : 'focus'; this.setState({ mode: n, running: false, left: s.dur[n] * 60 }); },
+      toSetup: () => this.setState({ tab: 'setup' }),
+      modes: [['focus', 'Focus'], ['short', 'Short Break'], ['long', 'Long Break']].map(([k, l]) => ({ label: l, go: () => this.pick(k), style: pill(s.mode === k) })),
+      breakMsg: msgs[s.msg % msgs.length],
+      task: s.task, setTask: e => this.setState({ task: e.target.value }),
+      presets: [['Deep Focus', 50], ['Normal', 25], ['Custom', 35]].map(([l, mn]) => ({ label: l, min: mn, go: () => this.setState(st => ({ dur: { ...st.dur, focus: mn } })),
+        style: `flex:1;height:60px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:${ink};border:1.5px solid ${s.dur.focus === mn ? accent : 'oklch(0.85 0.02 70)'};background:${s.dur.focus === mn ? 'oklch(0.99 0.008 80)' : 'transparent'}` })),
+      startFocus: () => this.setState(st => ({ tab: 'focus', mode: 'focus', running: true, left: st.dur.focus * 60 })),
+      kpis: [{ v: '12h 35m', l: 'Focus time' }, { v: '27', l: 'Sessions' }, { v: '5 days', l: 'Streak' }, { v: '18', l: 'Tasks completed' }],
+      bars: [['Mon', 7, '2h 5m'], ['Tue', 10, '3h 0m'], ['Wed', 5, '1h 40m'], ['Thu', 11, '3h 20m'], ['Fri', 8, '2h 30m']].map(([d, n, h]) => ({ d, h, style: `width:100%;max-width:46px;height:${n * 13}px;border-radius:8px 8px 4px 4px;background:${d === 'Thu' ? accent : 'oklch(0.85 0.06 55)'}` })),
+      history: [{ day: 'Today', items: [H('09:10', 'Focus', 'Build authentication API', 25), H('09:35', 'Break', '', 5), H('09:40', 'Focus', 'Build authentication API', 25), H('10:05', 'Break', '', 5), H('10:10', 'Focus', 'Review pull requests', 25)] }, { day: 'Yesterday', items: [H('14:20', 'Focus', 'Plan next week', 50), H('15:10', 'Focus', 'Outline the launch email', 25)] }],
+      subtabs: Object.keys(rowsBy).map(k => ({ label: k, go: () => this.setState({ sub: k }), style: pill(s.sub === k) + ';border:1px solid oklch(0.88 0.02 70)' })), rows,
+      ovModes: ['minimal', 'compact', 'expanded'].map(k => ({ label: k[0].toUpperCase() + k.slice(1), go: () => this.setState({ ov: k }), style: pill(s.ov === k) })),
+      ovMin: s.ov === 'minimal', ovCompact: s.ov === 'compact', ovExp: s.ov === 'expanded',
+      corners: ['TL', 'TR', 'BL', 'BR'].map(c => ({ label: c, go: () => this.setState({ corner: c }), style: `width:34px;height:28px;border-radius:8px;cursor:pointer;font-size:12px;border:1px solid ${s.corner === c ? accent : 'oklch(0.85 0.02 70)'};background:${s.corner === c ? accent : 'transparent'};color:${s.corner === c ? '#fff' : ink}` })),
+      overlayPos: `position:absolute;${D[s.corner]};opacity:${s.opacity / 100};transition:all .25s;${s.click ? 'outline:1.5px dashed oklch(0.8 0.1 85);outline-offset:3px;border-radius:16px' : ''}`,
+      opacity: s.opacity, setOpacity: e => this.setState({ opacity: +e.target.value }),
+      toggleClick: () => this.setState({ click: !s.click }), clickLabel: s.click ? 'on' : 'off',
+      clickStyle: `height:28px;padding:0 12px;border-radius:99px;cursor:pointer;font-size:13px;border:1px solid ${s.click ? accent : 'oklch(0.85 0.02 70)'};background:${s.click ? accent : 'transparent'};color:${s.click ? '#fff' : ink}`
+    };
+  }
+}
+</script>
+</body>
+</html>
